@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import Anime from "./Anime";
 
 export default function Animes() {
   const [isLoading, setIsLoading] = useState(true);
   const [animes, setAnimes] = useState([{}]);
-  const message = "Hello, world!";
-
-  const animeArray = [{ name: "Naruto", status: "En curso" }];
+  const animeArray = [
+    { name: "Naruto", status: "En curso" },
+    { name: "Shingeki No Kyojin", status: "En curso" },
+  ];
 
   useEffect(() => {
     fetch("https://dog.ceo/api/breeds/image/random")
@@ -28,12 +30,7 @@ export default function Animes() {
         <p>Componente Listado De Animes</p>
         <div>
           {animes.map((e) => {
-            return (
-              <div>
-                <div>Name: {e.name}</div>
-                <div>Status: {e.status}</div>
-              </div>
-            );
+            return <Anime data={e} />;
           })}
         </div>
       </div>
