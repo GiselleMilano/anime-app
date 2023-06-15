@@ -4,7 +4,7 @@ import Anime from "../types/anime";
 
 export default function AnimeList() {
   const [isLoading, setIsLoading] = useState(true);
-  const [animes, setAnimes] = useState<Anime[] | null>(null);
+  const [animes, setAnimes] = useState<Anime[]>([]);
 
   // Eliminar cuando este pronto el fetch a la tabla de animes.
   const animeArray: Anime[] = [
@@ -39,11 +39,8 @@ export default function AnimeList() {
   } else {
     return (
       <div className="flex justify-center items-center w-full h-full">
-        <div
-          className="flex p-2 justify-center bg-neutral-700"
-          style={{ width: "79%" }}
-        >
-          <ul className="flex flex-row gap-2 w-full justify-center flex-wrap p-2">
+        <div className="flex w-4/5 p-2 justify-center bg-neutral-700">
+          <ul className="grid grid-cols-6 gap-2">
             {animes.map((e: Anime) => {
               return <AnimeCard key={e.id} data={e} />;
             })}
