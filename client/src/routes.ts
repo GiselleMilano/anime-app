@@ -1,21 +1,21 @@
 import React from "react";
 import { RouteProps } from "react-router-dom";
-import Home from "./pages/Home";
-import AddAnimes from "./pages/AddAnimes";
-import EditAnime from "./pages/EditAnime";
+import HomePage from "./pages/HomePage";
+import AddAnimesPage from "./pages/AddAnimesPage";
+import EditAnimePage from "./pages/EditAnimePage";
 
 const routes: RouteProps[] = [
   {
     path: "/",
-    Component: Home,
+    Component: HomePage,
   },
   {
     path: "/add-animes",
-    Component: AddAnimes,
+    Component: AddAnimesPage,
   },
   {
     path: "/edit-anime/:id",
-    Component: EditAnime,
+    Component: EditAnimePage,
   },
 ];
 
