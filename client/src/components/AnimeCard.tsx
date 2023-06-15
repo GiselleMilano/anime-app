@@ -8,8 +8,11 @@ export default function AnimeCard(props: any) {
 
   return (
     <Link to={"/edit-anime/" + element.id}>
-      <li className="max-w-sm rounded flex flex-col overflow-hidden shadow-lg bg-neutral-600 cursor-pointer">
-        <div className="flex flex-row bg-neutral-700 w-full justify-center">
+      <li
+        className="max-w-sm rounded flex flex-col overflow-hidden shadow-lg bg-neutral-500 cursor-pointer"
+        style={{ width: "230px" }}
+      >
+        <div className="flex flex-row bg-neutral-600 w-full justify-center">
           <img
             className="w-48"
             src="/img_example.jpg"
@@ -17,8 +20,8 @@ export default function AnimeCard(props: any) {
           ></img>
         </div>
         <div className="px-6 space-y-4">
-          <div className="pt-4">
-            <div className="font-bold text-xl">{element.name}</div>
+          <div className="pt-4 font-bold text-xl whitespace-nowrap overflow-hidden">
+            {element.name}
           </div>
           <ul className="pb-2">
             {element.categories.map((c: Category) => {
