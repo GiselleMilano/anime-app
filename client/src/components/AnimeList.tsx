@@ -18,36 +18,6 @@ export default function AnimeList() {
         { id: 2, label: "comedy" },
       ],
     },
-    {
-      id: 1,
-      name: "Shingeki No Kyojin",
-      status: "en curso",
-      description: null,
-      categories: [
-        { id: 1, label: "shonen" },
-        { id: 2, label: "mistery" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Bleach",
-      status: "completado",
-      description: null,
-      categories: [
-        { id: 1, label: "shonen" },
-        { id: 2, label: "adventure" },
-      ],
-    },
-    {
-      id: 3,
-      name: "Kimetsu No Yaiba",
-      status: "en curso",
-      description: null,
-      categories: [
-        { id: 1, label: "shonen" },
-        { id: 2, label: "drama" },
-      ],
-    },
   ];
 
   useEffect(() => {
@@ -62,21 +32,23 @@ export default function AnimeList() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center w-full h-full mt-4">
+      <div className="flex justify-center items-center w-full h-full">
         <h3>Loading...</h3>
       </div>
     );
   } else {
     return (
-      <div className="flex justify-center items-center w-full h-full mt-4">
-        <ul
-          className="flex flex-row gap-2 justify-start flex-wrap"
-          style={{ width: "70%" }}
+      <div className="flex justify-center items-center w-full h-full">
+        <div
+          className="flex p-2 justify-center bg-neutral-700"
+          style={{ width: "79%" }}
         >
-          {animes.map((e: Anime) => {
-            return <AnimeCard key={e.id} data={e} />;
-          })}
-        </ul>
+          <ul className="flex flex-row gap-2 w-full justify-center flex-wrap p-2">
+            {animes.map((e: Anime) => {
+              return <AnimeCard key={e.id} data={e} />;
+            })}
+          </ul>
+        </div>
       </div>
     );
   }
