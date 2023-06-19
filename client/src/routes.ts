@@ -1,10 +1,9 @@
-import React from "react";
-import { RouteProps } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import AddAnimesPage from "./pages/AddAnimesPage";
 import EditAnimePage from "./pages/EditAnimePage";
 
-const routes: RouteProps[] = [
+const routes: RouteObject[] = [
   {
     path: "/",
     Component: HomePage,
