@@ -31,22 +31,14 @@ export default function AnimeList() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center w-full h-full">
-        <h3>Loading...</h3>
-      </div>
-    );
+    return <h3>Loading...</h3>;
   } else {
     return (
-      <div className="flex justify-center items-center w-full h-full">
-        <div className="flex w-4/5 p-2 justify-center bg-neutral-700">
-          <ul className="grid grid-cols-6 gap-2">
-            {animes.map((e: Anime) => {
-              return <AnimeCard key={e.id} data={e} />;
-            })}
-          </ul>
-        </div>
-      </div>
+      <ul className="grid grid-cols-6 gap-2">
+        {animes.map((e: Anime) => {
+          return <AnimeCard key={e.id} data={e} />;
+        })}
+      </ul>
     );
   }
 }
