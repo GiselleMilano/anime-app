@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import AnimeType from "../types/anime";
 import { useParams } from "react-router-dom";
 import Category from "../types/category";
@@ -37,7 +37,7 @@ export default function Anime(anime: AnimeType) {
       });
   }, []);
 
-  const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     alert("el select cambio de valor a: " + event.target.value);
     setAnimeStatus(event.target.value);
   };
@@ -71,7 +71,7 @@ export default function Anime(anime: AnimeType) {
             style={{ width: "80%" }}
           >
             <div className="mb-8">
-              <div className="font-bold text-xl mb-2">{animeData.name}</div>
+              <div className="font-bold text-xl mb-2">{animeData!.name}</div>
               <div className="text-xl">
                 Status:{" "}
                 <select
@@ -95,13 +95,13 @@ export default function Anime(anime: AnimeType) {
               <div className="text-xl mt-2 flex-wrap">
                 Synopsis:{" "}
                 <p className="text-sm flex-wrap pl-2 mt-2">
-                  {animeData.description}
+                  {animeData!.description}
                 </p>
               </div>
               <div className="mt-2">
                 <p className="text-xl">Categories:</p>
                 <ul className="mt-2 pl-2">
-                  {animeData.categories.map((c: Category) => {
+                  {animeData!.categories.map((c: Category) => {
                     return (
                       <li key={c.id} className="inline-block mb-2 mr-2">
                         <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
