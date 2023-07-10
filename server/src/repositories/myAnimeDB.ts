@@ -20,6 +20,15 @@ export async function createAnime(animeData: Anime) {
   });
 }
 
+export async function getAnimeById(id: number) {
+  const anime = await prisma.anime.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return anime;
+}
+
 export async function getCategories() {
   const categories = await prisma.category.findMany();
   return categories;
@@ -33,6 +42,15 @@ export async function createCategory(categoryData: Category) {
   });
 }
 
+export async function getCategoryById(id: number) {
+  const result = await prisma.category.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return result;
+}
+
 export async function getStatuses() {
   const statuses = await prisma.status.findMany();
   return statuses;
@@ -44,4 +62,13 @@ export async function createStatus(statusData: Status) {
       label: statusData.label,
     },
   });
+}
+
+export async function getStatusById(id: number) {
+  const result = await prisma.status.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return result;
 }
