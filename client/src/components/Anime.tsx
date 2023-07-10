@@ -2,44 +2,34 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import AnimeType from "../types/anime";
 import { useParams } from "react-router-dom";
 import Category from "../types/category";
+import Status from "../types/status";
 
 export default function Anime(anime: AnimeType) {
   const [isLoading, setIsLoading] = useState(true);
   const [animeData, setAnimeData] = useState<AnimeType | null>(null);
-  const [animeStatus, setAnimeStatus] = useState("");
+  const [options, setOptions] = useState<Status[] | null>(null);
+  const [value, setValue] = useState<number>(0);
 
   const { id } = useParams();
 
-  // Eliminar y dejar el fetch del useEffect.
-  const animeObj: AnimeType = {
-    id: 1,
-    name: "Shingeki No Kyojin",
-    status: "in progress",
-    description:
-      "Muchos años atrás, la humanidad estuvo al borde de la extinción con la aparición de unas criaturas gigantes que devoraban a todas las personas. Huyendo, la humanidad consiguió sobrevivir en una ciudad fortificada de altas murallas que se ha convertido en el último reducto de la civilización contra los Titanes que campan a sus anchas por el mundo. Ahora esa paz está a punto de verse interrumpida por una cadena de acontecimientos que llevará a desvelar qué son los Titanes y cómo aparecieron.",
-    categories: [
-      { id: 1, label: "shonen" },
-      { id: 2, label: "mistery" },
-    ],
-  };
-
-  // sustituir por un fetch a la tabla status.
-  const status = ["completed", "in progress", "not started"];
-
   useEffect(() => {
-    // sustituir por un fetch a la tabla de animes agregados.
-    fetch("https://dog.ceo/api/breeds/image/random")
-      .then((response) => response.json())
-      .then((dog) => {
-        setAnimeData(animeObj);
-        setAnimeStatus(animeObj.status);
+    Promise.all([
+      fetch("http://localhost:3000/animes/" + id),
+      fetch("http://localhost:3000/status"),
+    ])
+      .then(([resAnime, resStatus]) =>
+        Promise.all([resAnime.json(), resStatus.json()])
+      )
+      .then(([animeObject, statusArray]) => {
+        setAnimeData(animeObject);
+        setOptions(statusArray);
+        setValue(animeObject.status);
         setIsLoading(false);
       });
   }, []);
 
   const onSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    alert("el select cambio de valor a: " + event.target.value);
-    setAnimeStatus(event.target.value);
+    setValue(Number(event.target.value));
   };
 
   if (isLoading) {
@@ -77,19 +67,13 @@ export default function Anime(anime: AnimeType) {
                 <select
                   className="bg-neutral-600 cursor-pointer"
                   id="selectStatus"
+                  value={value}
                   onChange={onSelectChange}
                 >
-                  {status.map((s) =>
-                    s == animeStatus ? (
-                      <option value={s} selected>
-                        <p className="text-sm pl-2">{s}</p>
-                      </option>
-                    ) : (
-                      <option value={s}>
-                        <p className="text-sm pl-2">{s}</p>
-                      </option>
-                    )
-                  )}
+                  <option value={0}>Select</option>
+                  {options!.map((option) => (
+                    <option value={option.id}>{option.label}</option>
+                  ))}
                 </select>
               </div>
               <div className="text-xl mt-2 flex-wrap">
