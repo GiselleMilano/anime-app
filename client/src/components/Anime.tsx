@@ -2,35 +2,24 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import AnimeType from "../types/anime";
 import { useParams } from "react-router-dom";
 import Category from "../types/category";
-import Status from "../types/status";
+import SelectStatus from "./SelectStatus";
 
 export default function Anime(anime: AnimeType) {
   const [isLoading, setIsLoading] = useState(true);
   const [animeData, setAnimeData] = useState<AnimeType | null>(null);
-  const [options, setOptions] = useState<Status[] | null>(null);
-  const [value, setValue] = useState<number>(0);
 
   const { id } = useParams();
 
   useEffect(() => {
-    Promise.all([
-      fetch("http://localhost:3000/animes/" + id),
-      fetch("http://localhost:3000/status"),
-    ])
-      .then(([resAnime, resStatus]) =>
-        Promise.all([resAnime.json(), resStatus.json()])
-      )
-      .then(([animeObject, statusArray]) => {
-        setAnimeData(animeObject);
-        setOptions(statusArray);
-        setValue(animeObject.status);
-        setIsLoading(false);
-      });
-  }, []);
+    const callback = async () => {
+      const res = await fetch("http://localhost:3000/animes/" + id);
+      const json = await res.json();
+      setAnimeData(json);
+      setIsLoading(false);
+    };
 
-  const onSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setValue(Number(event.target.value));
-  };
+    callback();
+  }, []);
 
   if (isLoading) {
     return (
@@ -63,18 +52,7 @@ export default function Anime(anime: AnimeType) {
             <div className="mb-8">
               <div className="font-bold text-xl mb-2">{animeData!.name}</div>
               <div className="text-xl">
-                Status:{" "}
-                <select
-                  className="bg-neutral-600 cursor-pointer"
-                  id="selectStatus"
-                  value={value}
-                  onChange={onSelectChange}
-                >
-                  <option value={0}>Select</option>
-                  {options!.map((option) => (
-                    <option value={option.id}>{option.label}</option>
-                  ))}
-                </select>
+                Status: <SelectStatus animeStatus={animeData!.status} />
               </div>
               <div className="text-xl mt-2 flex-wrap">
                 Synopsis:{" "}
