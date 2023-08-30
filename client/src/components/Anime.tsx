@@ -1,25 +1,60 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import AnimeType from "../types/anime";
 import { useParams } from "react-router-dom";
-import Category from "../types/category";
 import SelectStatus from "./SelectStatus";
+import ListCategories from "./ListCategories";
+import { callAPI } from "../utils/callAPI";
+import Status from "../types/status";
+import Category from "../types/category";
 
 export default function Anime(anime: AnimeType) {
   const [isLoading, setIsLoading] = useState(true);
   const [animeData, setAnimeData] = useState<AnimeType | null>(null);
+  const [selectOptions, setSelectOptions] = useState<Status[]>([]);
+  const [categories, setCategories] = useState<Category[]>();
+  const [selectValue, setSelectValue] = useState<number>(0);
 
   const { id } = useParams();
 
   useEffect(() => {
     const callback = async () => {
-      const res = await fetch("http://localhost:3000/animes/" + id);
-      const json = await res.json();
-      setAnimeData(json);
-      setIsLoading(false);
-    };
+      const animeJSON: AnimeType = await callAPI("/animes/", id, "GET", {});
+      const statusJSON: Status[] = await callAPI("/status/", null, "GET", {});
 
+      if (animeJSON != null) {
+        setAnimeData(animeJSON);
+      }
+      if (animeJSON.status != null) {
+        setSelectValue(animeJSON.status);
+      }
+      if (statusJSON != null) {
+        setSelectOptions(statusJSON);
+      }
+
+      const fetchCategory = async (id: number) => {
+        const categoriesJSON = await callAPI("/categories/", id, "GET", {});
+        return categoriesJSON;
+      };
+
+      const callbackCategories = async () => {
+        const categoriesPromises = animeJSON.categories.map((id: number) =>
+          fetchCategory(id)
+        );
+        const categories = await Promise.all(categoriesPromises);
+        setCategories(categories);
+      };
+
+      callbackCategories();
+    };
     callback();
+
+    setIsLoading(false);
   }, []);
+
+  const onSelectChange = (value: number) => {
+    console.log("se llamo al onSelectChange del padre, el value es: " + value);
+    setSelectValue(value);
+  };
 
   if (isLoading) {
     return (
@@ -50,29 +85,26 @@ export default function Anime(anime: AnimeType) {
             style={{ width: "80%" }}
           >
             <div className="mb-8">
-              <div className="font-bold text-xl mb-2">{animeData!.name}</div>
+              <div className="font-bold text-xl mb-2">
+                {animeData != null ? animeData.name : null}
+              </div>
               <div className="text-xl">
-                Status: <SelectStatus animeStatus={animeData!.status} />
+                Status:{" "}
+                <SelectStatus
+                  currentValue={Number(selectValue)}
+                  options={selectOptions}
+                  onChange={onSelectChange}
+                />
               </div>
               <div className="text-xl mt-2 flex-wrap">
                 Synopsis:{" "}
                 <p className="text-sm flex-wrap pl-2 mt-2">
-                  {animeData!.description}
+                  {animeData != null ? animeData.description : null}
                 </p>
               </div>
               <div className="mt-2">
                 <p className="text-xl">Categories:</p>
-                <ul className="mt-2 pl-2">
-                  {animeData!.categories.map((c: Category) => {
-                    return (
-                      <li key={c.id} className="inline-block mb-2 mr-2">
-                        <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-                          {c.label}
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
+                <ListCategories categories={categories!} />
               </div>
             </div>
           </div>
