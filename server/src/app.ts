@@ -2,16 +2,20 @@ import express from "express";
 import cors from "cors";
 import Anime from "./types/anime";
 import {
-  getAnimes,
+  createStatus,
+  getStatusById,
+  getStatuses,
+} from "./repositories/statusRepository";
+import {
   createAnime,
+  getAnimeById,
+  getAnimes,
+} from "./repositories/animeRepository";
+import {
   createCategory,
   getCategories,
-  createStatus,
-  getStatuses,
-  getAnimeById,
   getCategoryById,
-  getStatusById,
-} from "./repositories/myAnimeDB";
+} from "./repositories/categoryRepository";
 import { Category } from "@prisma/client";
 import Status from "./types/status";
 const app = express();
